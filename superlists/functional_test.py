@@ -37,10 +37,8 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Water the plants' for row in rows)
-        )
-        
+        self.assertIn('1: Water the plants', [row.text for row in rows])
+
         #There is still a text box prompting Ella to enter in another item
         #she enters "Run a mile" into the text box and presses enter
 
