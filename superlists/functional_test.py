@@ -11,6 +11,17 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn( row_text , [row.text for row in rows])
+
+    def enter_a_new_item(self, todo_text):
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys(todo_text)
+        inputbox.send_keys(Keys.ENTER)
+
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Ella goes to check out a cool new website
         #She goes to the home page
@@ -29,20 +40,19 @@ class NewVisitorTest(unittest.TestCase):
         )
 
         #she types water the plants into a text box
-        inputbox.send_keys('Water the plants')
-
         #when she hits enter the page refreashes and displays a list
-        # "1 : Water the plants"
-        inputbox.send_keys(Keys.ENTER)
+        self.enter_a_new_item('Water the plants')
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Water the plants', [row.text for row in rows])
+        # "1 : Water the plants"
+        self.check_for_row_in_list_table('1: Water the plants')
 
         #There is still a text box prompting Ella to enter in another item
         #she enters "Run a mile" into the text box and presses enter
+        self.enter_a_new_item('Run a mile')
 
         #the homepage refreshed again and displays both items on her list
+        self.check_for_row_in_list_table('1: Water the plants')
+        self.check_for_row_in_list_table('2: Run a mile')
 
         #eidith realizes that there is a unique URL for her
 
