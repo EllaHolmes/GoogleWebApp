@@ -40,10 +40,11 @@ class NewVisitorTest(LiveServerTestCase):
         )
 
         #she types water the plants into a text box
-        #when she hits enter the page refreashes and displays a list
+
         self.enter_a_new_item('Water the plants')
 
-        # "1 : Water the plants"
+        ella_list_url = self.browser.current_url
+        self.assertRegexpMatches(ella_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Water the plants')
 
         #There is still a text box prompting Ella to enter in another item
@@ -54,9 +55,26 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('1: Water the plants')
         self.check_for_row_in_list_table('2: Run a mile')
 
-        #eidith realizes that there is a unique URL for her
+        #now a new user, Oren comes along,
 
-        # she revisits this URL and her todo list is still there
+        ##We use a new browser session to make sure no information
+        ##of Ella's comes along (eg. cookies, localSrotage)
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
 
-        #happy, Ella goes back to watching protlandia
-        self.fail('Finish the test!')
+        self.browser.get(self.live_server_url)
+        self.browser = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Water the plants', page_text)
+        self.assertNotIn('Run a mile', page_text)
+
+        #he starts a new list by entering an item
+        self.enter_a_new_item('Buy milk')
+
+        #oren gets his own url
+        oren_list_url = self.browser.current_url
+        self.assertRegexpMatches(oren_list_url, '/lists/.+')
+        self.assertNotEqual(oren_list_url, ella_list_url)
+
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Water the plants', page_text)
+        self.assertIn('Buy milk', page_text)
