@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.template.loader import render_to_string
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
-from lists.models import Item
+from lists.models import Item, List
 from lists.views import home_page
 
 class HomePageTest(TestCase):
@@ -18,39 +18,34 @@ class HomePageTest(TestCase):
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
 
-    def test_home_page_desent_save_on_GET_request(self):
-        request = HttpRequest()
-        home_page(request)
-        self.assertEqual(Item.objects.count(), 0)
+class NewListsTest(TestCase):
 
-    def test_home_page_can_save_a_post_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = home_page(request)
+    def test_saving_a_POST_request(self):
+        self.client.post(
+            '/lists/new',
+            data={'item_text': 'A new list item'}
+        )
 
         #check that the item is saved
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'A new list item')
 
-    def test_home_page_redirects_after_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
+    def test_redirects_after_POST(self):
+        response = self.client.post(
+            '/lists/new',
+            data={'item_text': 'A new list item'}
+        )
 
-        response = home_page(request)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/the-only-list/')
+        self.assertRedirects(response, '/lists/the-only-list/')
 
 
 class ListViewTest(TestCase):
 
     def test_displays_all_items(self):
-        Item.objects.create(text= 'itemey 1')
-        Item.objects.create(text= 'itemey 2')
+        new_list = List.objects.create()
+        Item.objects.create(text= 'itemey 1', list = new_list)
+        Item.objects.create(text= 'itemey 2', list = new_list)
 
         response = self.client.get('/lists/the-only-list/')
 
@@ -62,16 +57,24 @@ class ListViewTest(TestCase):
         self.assertTemplateUsed(response, 'list.html')
 
 
-class ItemModeTest(TestCase):
+class ItemAndListModelsTest(TestCase):
 
-    def test_saving_and_retrieving_items(self):
+    def test_saving_and_retrieving_items_in_list(self):
+        new_list = List()
+        new_list.save()
+
         first_item = Item()
         first_item.text = 'The first(ever) list item'
+        first_item.list = new_list
         first_item.save()
 
         second_item = Item()
         second_item.text = 'Item the second'
+        second_item.list = new_list
         second_item.save()
+
+        saved_list = List.objects.first()
+        self.assertEqual(new_list, saved_list)
 
         saved_items = Item.objects.all()
         self.assertEqual(saved_items.count(), 2)
@@ -80,3 +83,5 @@ class ItemModeTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first(ever) list item' )
         self.assertEqual(second_saved_item.text, 'Item the second')
+        self.assertEqual(first_saved_item.list, new_list )
+        self.assertEqual(second_saved_item.list, new_list)

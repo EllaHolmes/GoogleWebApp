@@ -63,7 +63,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Firefox()
 
         self.browser.get(self.live_server_url)
-        self.browser = self.browser.find_element_by_tag_name('body').text
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Water the plants', page_text)
         self.assertNotIn('Run a mile', page_text)
 
