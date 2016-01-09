@@ -93,7 +93,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def check_input_box_is_centered(self):
         # she knotices that the inputbox is nicely centered
-        inputbox = self.browser.find_elements_by_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + (inputbox.size['width'] / 2),
              512,

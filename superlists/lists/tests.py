@@ -34,6 +34,7 @@ class NewListsTest(TestCase):
     def test_redirects_after_POST(self):
         response = self.client.post(
             '/lists/new',
+            follow = True,
             data={'item_text': 'A new list item'}
         )
 
@@ -92,7 +93,6 @@ class ListViewTest(TestCase):
         correct_list = List.objects.create()
         response = self.client.get('/lists/%d/' % (correct_list.id,))
         self.assertEqual(response.context['list'], correct_list)
-
 
 class ItemAndListModelsTest(TestCase):
 
