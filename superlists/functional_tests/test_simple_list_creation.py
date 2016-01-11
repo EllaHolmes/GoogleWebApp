@@ -1,28 +1,7 @@
-# from django.test import LiveServerTestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .base import ToDoFunctionalTest
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import unittest
 
-class NewVisitorTest(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn( row_text , [row.text for row in rows])
-
-    def enter_a_new_item(self, todo_text):
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        inputbox.send_keys(todo_text)
-        inputbox.send_keys(Keys.ENTER)
-
+class NewVisitorTest(ToDoFunctionalTest):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Ella goes to check out a cool new website
         #She goes to the home page
@@ -79,24 +58,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Water the plants', page_text)
         self.assertIn('Buy milk', page_text)
-
-    def test_layout_and_styling(self):
-        #Ella goes to the home page
-        self.browser.set_window_size(1024, 768)
-        self.browser.get(self.live_server_url)
-
-        # she knotices that the inputbox is nicely centered
-        self.check_input_box_is_centered()
-
-        self.enter_a_new_item('testing')
-        self.check_input_box_is_centered
-
-
-    def check_input_box_is_centered(self):
-        # she knotices that the inputbox is nicely centered
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + (inputbox.size['width'] / 2),
-             512,
-             delta=5,
-        )
