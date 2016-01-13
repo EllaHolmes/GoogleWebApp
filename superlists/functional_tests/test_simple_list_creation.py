@@ -25,15 +25,15 @@ class NewVisitorTest(ToDoFunctionalTest):
 
         ella_list_url = self.browser.current_url
         self.assertRegexpMatches(ella_list_url, '/lists/.+')
-        self.check_for_row_in_list_table('1: Water the plants')
+        self.check_for_row_in_list_table('Water the plants')
 
         #There is still a text box prompting Ella to enter in another item
         #she enters "Run a mile" into the text box and presses enter
         self.enter_a_new_item('Run a mile')
 
         #the homepage refreshed again and displays both items on her list
-        self.check_for_row_in_list_table('1: Water the plants')
-        self.check_for_row_in_list_table('2: Run a mile')
+        self.check_for_row_in_list_table('Water the plants')
+        self.check_for_row_in_list_table('Run a mile')
 
         #now a new user, Oren comes along,
 

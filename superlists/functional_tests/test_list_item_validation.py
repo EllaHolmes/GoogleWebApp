@@ -16,12 +16,12 @@ class ItemValidationTest(ToDoFunctionalTest):
 
         #she tries to enter a second blank item again
         self.enter_a_new_item('Buy milk')
-        self.check_for_row_in_list_table('1: Buy milk')
+        self.check_for_row_in_list_table('Buy milk')
 
         self.enter_a_new_item('')
 
         #she recives a similar wanring on the list page.
-        self.check_for_row_in_list_table('1: Buy milk')
+        self.check_for_row_in_list_table('Buy milk')
         error = self.browser.find_element_by_css_selector('.has-error')
         self.assertEqual(error.text, "You can't have an empty list item")
 

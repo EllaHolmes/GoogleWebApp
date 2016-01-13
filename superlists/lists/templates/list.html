@@ -6,6 +6,7 @@
     <table id="id_list_table" class = "table">
       {% for item in list.item_set.all %}
         <tr><td>{{ forloop.counter }}:</td><td>{{item.text}}</td></tr>
+        <td><input type = "checkbox"/></td>
       {% endfor %}
     </table>
 {% endblock %}
