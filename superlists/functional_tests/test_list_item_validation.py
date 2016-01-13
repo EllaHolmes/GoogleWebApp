@@ -28,4 +28,4 @@ class ItemValidationTest(ToDoFunctionalTest):
         # self.enter_a_new_item('make tea')
 
         #And she can correct it but filling in the blakn
-        self.fail('Finish the test!')
+        # self.fail('Finish the test!')
