@@ -25,7 +25,7 @@ class ItemValidationTest(ToDoFunctionalTest):
         error = self.browser.find_element_by_css_selector('.has-error')
         self.assertEqual(error.text, "You can't have an empty list item")
 
-        self.enter_a_new_item('make tea')
+        # self.enter_a_new_item('make tea')
 
         #And she can correct it but filling in the blakn
         self.fail('Finish the test!')
