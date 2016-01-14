@@ -16,7 +16,14 @@ class ToggleDoneTest(ToDoFunctionalTest):
         except NoSuchElementException:
             self.fail("%s not marked done!" % (todo_text))
 
-    def test_can_toggle_finished_items(self):
+    def check_not_marked_off(self, todo_text):
+        try:
+            self.check_marked_off(todo_text)
+        except:
+            return
+        self.fail("%s not marked done!" % (todo_text))
+
+    def test_can_mark_finished_items(self):
         #Edith makes a quick shoping list,
         #noticing a checkbox to toggle done ItemValidationTest
         self.browser.get(self.live_server_url)
@@ -29,7 +36,6 @@ class ToggleDoneTest(ToDoFunctionalTest):
 
         #at the store Edits buys her feathers and marks them done on her List
         self.toggle_todo_done(['Buy peacock feathers', 'Buy fishing line'])
-
 
         #Edith returns home and opens her todo list and sees
         # that her list is still marked and crossed off
@@ -46,3 +52,35 @@ class ToggleDoneTest(ToDoFunctionalTest):
         self.check_marked_off('Buy fishing line')
         self.toggle_todo_done(['Tie some flys'])
         self.check_marked_off('Tie some flys')
+
+    def test_can_toggle_finished_items(self):
+        #Edith's ties flying hobby is booming, and she wants
+        #a list that she can use over and over again
+        self.browser.get(self.live_server_url)
+        self.enter_a_new_item('Buy featehrs')
+        self.enter_a_new_item('Buy fishing lines')
+        self.enter_a_new_item('Buy sparkles')
+
+        #she looks in her closet and already has finishing line
+        self.toggle_todo_done(['Buy fishing line'])
+        self.check_marked_off('Buy fishing line')
+
+        #she goes to the store, and finishing shopping
+        self.toggle_todo_done([
+            'Buy feathers',
+            'Buy sparkles',
+        ])
+
+        self.check_marked_off('Buy feathers')
+        self.check_marked_off('Buy fishing lines')
+        self.check_marked_off('Buy sparkles')
+
+        self.toggle_todo_done([
+            'Buy feathers',
+            'Buy fishing lines',
+            'Buy sparkles',
+        ])
+
+        self.check_not_marked_off('Buy feathers')
+        self.check_not_marked_off('Buy fishing lines')
+        self.check_not_marked_off('Buy sparkles')
