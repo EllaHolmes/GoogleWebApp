@@ -19,7 +19,7 @@ class ManyListsTest(ToDoFunctionalTest):
 
         #Edith goes back to the home page and sees her grocery List
         self.browser.get(self.live_server_url)
-        self.check_for_row_in_list_table('')
+        self.check_for_row_in_list_table('Groceries')
 
         #Edith creates a new list for her art history HW
         self.browser.enter_a_new_item('Read Camille')
