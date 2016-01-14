@@ -22,5 +22,6 @@
       {% endfor %}
     </table>
     <button id = "toggle_done" type = "submit">Mark Done</Button>
+      {% csrf_token %}
   </form>
 {% endblock %}

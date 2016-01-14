@@ -142,3 +142,41 @@ class ListViewTest(TestCase):
         item2 = Item.objects.get(id=item2.id)
         self.assertTrue(item1.is_done)
         self.assertFalse(item2.is_done)
+
+    def test_POST_multiple_items_done(self):
+        #create List
+        current_list = List.objects.create()
+        item1 = Item.objects.create(text="Item 1", list = current_list)
+        item2 = Item.objects.create(text="Item 2", list = current_list)
+
+        #post data
+        respose = self.client.post(
+            '/lists/%d/items/' % (current_list.id,),
+            # - include toggle Item
+            data ={'mark_item_done' : [item1.id, item2.id] },
+        )
+        #check if we added urls
+        self.assertRedirects(respose, '/lists/%d/' % (current_list.id))
+
+        #check item is updated
+        item1 = Item.objects.get(id=item1.id)
+        item2 = Item.objects.get(id=item2.id)
+        self.assertTrue(item1.is_done)
+        self.assertTrue(item2.is_done)
+
+    def test_POST_zero_items_done(self):
+        current_list = List.objects.create()
+        item1 = Item.objects.create(text="Item 1", list = current_list)
+        item2 = Item.objects.create(text="Item 2", list = current_list)
+
+        respose = self.client.post(
+            '/lists/%d/items/' % (current_list.id,),
+            data ={'mark_item_done' : [item1.id, item2.id] },
+        )
+        self.assertRedirects(respose, '/lists/%d/' % (current_list.id))
+
+        #check item is updated
+        item1 = Item.objects.get(id=item1.id)
+        item2 = Item.objects.get(id=item2.id)
+        self.assertTrue(item1.is_done)
+        self.assertTrue(item2.is_done)

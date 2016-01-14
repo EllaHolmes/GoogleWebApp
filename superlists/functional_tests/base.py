@@ -17,7 +17,7 @@ class ToDoFunctionalTest(StaticLiveServerTestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         for row in rows:
-            row_text = row.find_element_by_tag_name('td')[2].text
+            row_text = row.find_elements_by_tag_name('td')[2].text
             if item_text == row_text:
                 return row
         self.fail('"%s" not int table -"s"' % (item_text, table.text))
