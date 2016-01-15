@@ -17,9 +17,10 @@
                      {% if item.is_done%}checked="checked"{% endif %}
                      />
           </td>
-          <td class= "content {%if item.is_done %}todo-done{% endif %}"">
+          <td class= "content {%if item.is_done %}todo-done{% endif %}">
             {{item.text}}
           </td>
+          <td><a href = "/lists/{{ list.id }}/item/{{ item.id }}/delete">Delete</a></td>
         </tr>
       {% endfor %}
     </table>

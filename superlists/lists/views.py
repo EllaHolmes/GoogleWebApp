@@ -51,3 +51,8 @@ def edit_list(request, list_id):
         item.save()
 
     return redirect('/lists/%d/' % (list_.id))
+
+def delete_item(request, list_id, item_id):
+    Item.objects.get(id=item_id).delete()
+    list_ = List.objects.get(id=list_id)
+    return redirect('/lists/%d/' % (list_.id,))

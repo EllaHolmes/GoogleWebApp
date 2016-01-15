@@ -225,3 +225,21 @@ class EditListTest(TestCase):
         item2 = Item.objects.get(id=item2.id)
         self.assertFalse(item1.is_done)
         self.assertTrue(item2.is_done)
+
+class DeleteItemTest(TestCase):
+
+    def test_delete_item(self):
+        #create a new list with two objects
+        new_list = List.objects.create()
+        delete_item = Item.objects.create(text = 'Delete me', list = new_list)
+        Item.objects.create(text = 'Dont delete me', list = new_list)
+        Item.objects.create(text='an item', list = new_list)
+
+        response = self.client.post(
+            '/lists/%d/item/%d/delete' % (new_list.id, delete_item.id,),
+            follow = True,
+        )
+
+        self.assertContains(response, 'an item')
+        self.assertContains(response,  "Dont delete me")
+        self.assertNotContains(response, "Delete me")
