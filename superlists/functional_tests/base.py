@@ -20,7 +20,7 @@ class ToDoFunctionalTest(StaticLiveServerTestCase):
             row_text = row.find_elements_by_tag_name('td')[2].text
             if item_text == row_text:
                 return row
-        self.fail('"%s" not int table -"s"' % (item_text, table.text))
+        self.fail('"%s" not in table -"%s"' % (item_text, table.text))
 
     def check_for_row_in_list_table(self, row_text):
         row = self.find_table_row(row_text)

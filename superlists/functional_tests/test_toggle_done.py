@@ -57,8 +57,8 @@ class ToggleDoneTest(ToDoFunctionalTest):
         #Edith's ties flying hobby is booming, and she wants
         #a list that she can use over and over again
         self.browser.get(self.live_server_url)
-        self.enter_a_new_item('Buy featehrs')
-        self.enter_a_new_item('Buy fishing lines')
+        self.enter_a_new_item('Buy feathers')
+        self.enter_a_new_item('Buy fishing line')
         self.enter_a_new_item('Buy sparkles')
 
         #she looks in her closet and already has finishing line
@@ -72,7 +72,7 @@ class ToggleDoneTest(ToDoFunctionalTest):
         ])
 
         self.check_marked_off('Buy feathers')
-        self.check_marked_off('Buy fishing lines')
+        self.check_marked_off('Buy fishing line')
         self.check_marked_off('Buy sparkles')
 
         self.toggle_todo_done([
@@ -82,5 +82,5 @@ class ToggleDoneTest(ToDoFunctionalTest):
         ])
 
         self.check_not_marked_off('Buy feathers')
-        self.check_not_marked_off('Buy fishing lines')
+        self.check_not_marked_off('Buy fishing line')
         self.check_not_marked_off('Buy sparkles')
